@@ -1,0 +1,6 @@
+<configuration>
+    <input>
+        <net-file value="citygrid.net.xml"/>
+        <route-files value="citygrid.rou.xml"/>
+    </input>
+</configuration>

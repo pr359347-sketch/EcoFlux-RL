@@ -1,0 +1,9 @@
+# Python
+__pycache__/
+*.pyc
+
+# SUMO generated output
+simulation_log.csv
+
+# Temporary/test files
+run_sim_backup.py
