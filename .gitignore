@@ -209,6 +209,9 @@ tempCodeRunnerFile.py
 # PyPI configuration file
 .pypirc
 
+run_sim_backup.py
+simulation_state_backup.py
+
 # Marimo
 marimo/_static/
 marimo/_lsp/
@@ -216,3 +219,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+run_sim_backup.py
+simulation_state_backup.py
+simulation_log.csv
