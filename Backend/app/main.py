@@ -3,6 +3,7 @@ import asyncio
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 
 from app.routes.simulation import router as simulation_router
+from app.routes.rl import router as rl_router
 from app.websocket.manager import manager
 from app.services.simulation_service import simulation_service
 
@@ -33,6 +34,7 @@ def health_check():
 
 
 app.include_router(simulation_router)
+app.include_router(rl_router)
 
 
 @app.websocket("/ws")
