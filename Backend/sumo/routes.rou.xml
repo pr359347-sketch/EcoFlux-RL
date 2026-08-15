@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<routes>
+
+    <vType
+        id="car"
+        accel="2.6"
+        decel="4.5"
+        sigma="0.5"
+        length="5"
+        minGap="2.5"
+        maxSpeed="13.89"
+    />
+
+    <route
+        id="testRoute"
+        edges="A0A1 A1A2"
+    />
+
+    <flow
+        id="testFlow"
+        type="car"
+        route="testRoute"
+        begin="0"
+        end="100"
+        vehsPerHour="300"
+    />
+
+</routes>

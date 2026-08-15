@@ -8,12 +8,13 @@ async def test_websocket():
     async with websockets.connect(uri) as websocket:
         print("WebSocket connected!")
 
-        await websocket.send("Hello EcoTwin")
+        for i in range(5):
+            response = await websocket.recv()
 
-        response = await websocket.recv()
+            print(f"Update {i + 1}:")
+            print(response)
 
-        print("Server response:")
-        print(response)
+        print("WebSocket live streaming test completed successfully!")
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from app.services.simulation_service import simulation_service
 
@@ -11,12 +11,19 @@ router = APIRouter(
 
 @router.post("/start")
 def start_simulation():
-    state = simulation_service.start()
+    try:
+        state = simulation_service.start()
 
-    return {
-        "message": "Simulation started",
-        **state
-    }
+        return {
+            "message": "Simulation started",
+            **state
+        }
+
+    except RuntimeError as error:
+        raise HTTPException(
+            status_code=400,
+            detail=str(error)
+        )
 
 
 @router.post("/stop")

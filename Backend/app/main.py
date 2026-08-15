@@ -1,4 +1,7 @@
+import asyncio
+
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+STREAM_INTERVAL = 1.0
 
 from app.routes.simulation import router as simulation_router
 from app.websocket.manager import manager
@@ -29,14 +32,14 @@ def health_check():
 
 app.include_router(simulation_router)
 
-
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await manager.connect(websocket)
 
     try:
         while True:
-            data = await websocket.receive_text()
+            if simulation_service.get_state()["connected_to_sumo"]:
+                simulation_service.step()
 
             state = simulation_service.get_state()
 
@@ -46,12 +49,16 @@ async def websocket_endpoint(websocket: WebSocket):
                     "simulation_id": state["simulation_id"],
                     "status": state["status"],
                     "data": {
-                        "message": data
+                        "simulation_time": state["simulation_time"],
+                        "vehicle_count": state["vehicle_count"],
+                        "connected_to_sumo": state["connected_to_sumo"]
                     },
                     "timestamp": state["timestamp"]
                 },
                 websocket
             )
+
+            await asyncio.sleep(STREAM_INTERVAL)
 
     except WebSocketDisconnect:
         manager.disconnect(websocket)
