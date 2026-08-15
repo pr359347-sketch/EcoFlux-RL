@@ -1,11 +1,13 @@
 import asyncio
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-STREAM_INTERVAL = 1.0
 
 from app.routes.simulation import router as simulation_router
 from app.websocket.manager import manager
 from app.services.simulation_service import simulation_service
+
+
+STREAM_INTERVAL = 1.0
 
 
 app = FastAPI(
@@ -32,6 +34,7 @@ def health_check():
 
 app.include_router(simulation_router)
 
+
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await manager.connect(websocket)
@@ -39,9 +42,9 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while True:
             if simulation_service.get_state()["connected_to_sumo"]:
-                simulation_service.step()
-
-            state = simulation_service.get_state()
+                state = simulation_service.step()
+            else:
+                state = simulation_service.get_state()
 
             await manager.send_personal_message(
                 {
@@ -51,7 +54,8 @@ async def websocket_endpoint(websocket: WebSocket):
                     "data": {
                         "simulation_time": state["simulation_time"],
                         "vehicle_count": state["vehicle_count"],
-                        "connected_to_sumo": state["connected_to_sumo"]
+                        "connected_to_sumo": state["connected_to_sumo"],
+                        "rl_action": state.get("rl_action", None)
                     },
                     "timestamp": state["timestamp"]
                 },

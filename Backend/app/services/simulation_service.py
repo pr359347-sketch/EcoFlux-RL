@@ -3,6 +3,7 @@ from uuid import uuid4
 
 from app.simulation.state import simulation_state
 from app.simulation.sumo_client import sumo_client
+from app.services.rl_service import rl_service
 
 
 class SimulationService:
@@ -49,20 +50,35 @@ class SimulationService:
 
     def step(self):
         """
-        Advance the SUMO simulation by one step
-        and update the application state.
+        Advance SUMO simulation by one step,
+        update the application state, and get an RL action.
         """
 
         if not sumo_client.connected:
             raise RuntimeError("SUMO is not running.")
 
+        # Advance SUMO simulation
         sumo_client.simulation_step()
 
+        # Update simulation time
         simulation_state.update_time(
             sumo_client.get_time()
         )
 
-        return self.get_state()
+        # Get current simulation state
+        state = self.get_state()
+
+        # Ask RL service for the next action
+        action = rl_service.get_action({
+            "simulation_time": state["simulation_time"],
+            "vehicle_count": state["vehicle_count"],
+            "connected_to_sumo": state["connected_to_sumo"]
+        })
+
+        return {
+            **state,
+            "rl_action": action["action"]
+        }
 
     def get_state(self):
         state = simulation_state.get_state()
