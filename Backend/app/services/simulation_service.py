@@ -49,36 +49,37 @@ class SimulationService:
         return self.get_state()
 
     def step(self):
-        """
-        Advance SUMO simulation by one step,
-        update the application state, and get an RL action.
-        """
+    
+     if not sumo_client.connected:
+        raise RuntimeError("SUMO is not running.")
 
-        if not sumo_client.connected:
-            raise RuntimeError("SUMO is not running.")
+    # Advance SUMO simulation
+     sumo_client.simulation_step()
 
-        # Advance SUMO simulation
-        sumo_client.simulation_step()
+    # Update simulation time
+     simulation_state.update_time(
+        sumo_client.get_time()
+    )
 
-        # Update simulation time
-        simulation_state.update_time(
-            sumo_client.get_time()
-        )
+    # Get current simulation state
+     state = self.get_state()
 
-        # Get current simulation state
-        state = self.get_state()
+    # Ask RL service for the next action
+     action = rl_service.get_action({
+        "simulation_time": state["simulation_time"],
+        "vehicle_count": state["vehicle_count"],
+        "connected_to_sumo": state["connected_to_sumo"]
+     })
 
-        # Ask RL service for the next action
-        action = rl_service.get_action({
-            "simulation_time": state["simulation_time"],
-            "vehicle_count": state["vehicle_count"],
-            "connected_to_sumo": state["connected_to_sumo"]
-        })
+    # Store RL action in simulation state
+     simulation_state.set_rl_action(
+        action["action"]
+     )
 
-        return {
-            **state,
-            "rl_action": action["action"]
-        }
+     return {
+        **self.get_state(),
+        "rl_action": action["action"]
+     }
 
     def get_state(self):
         state = simulation_state.get_state()
