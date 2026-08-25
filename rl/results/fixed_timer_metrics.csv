@@ -1,0 +1,2 @@
+policy,steps,total_co2,total_waiting_time,vehicle_count
+fixed_timer,100,161791.6735791261,462.0,82

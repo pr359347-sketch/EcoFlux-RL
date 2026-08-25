@@ -1,0 +1,4 @@
+metric,fixed_timer,ppo,improvement_percent
+total_co2,161791.6735791261,162977.5364528599,-0.7329566766325836
+total_waiting_time,462.0,2591.0,-460.8225108225108
+vehicle_count,82,88,6
