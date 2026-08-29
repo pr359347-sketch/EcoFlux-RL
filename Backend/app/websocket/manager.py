@@ -1,3 +1,5 @@
+import asyncio
+
 from fastapi import WebSocket
 
 
@@ -13,12 +15,31 @@ class ConnectionManager:
         if websocket in self.active_connections:
             self.active_connections.remove(websocket)
 
-    async def send_personal_message(self, message: dict, websocket: WebSocket):
+    async def send_personal_message(
+        self,
+        message: dict,
+        websocket: WebSocket
+    ):
         await websocket.send_json(message)
 
     async def broadcast(self, message: dict):
-        for connection in self.active_connections:
-            await connection.send_json(message)
+        disconnected = []
+
+        async def send(connection: WebSocket):
+            try:
+                await asyncio.wait_for(
+                    connection.send_json(message),
+                    timeout=2.0
+                )
+            except Exception:
+                disconnected.append(connection)
+
+        await asyncio.gather(
+            *(send(connection) for connection in self.active_connections)
+        )
+
+        for connection in disconnected:
+            self.disconnect(connection)
 
 
 manager = ConnectionManager()

@@ -70,6 +70,31 @@ class SumoClient:
 
         return traci.vehicle.getIDCount()
 
+    def apply_traffic_light_action(self, action):
+        """
+        Apply RL phase actions to all configured traffic lights.
+        """
+
+        if not self.connected:
+            raise RuntimeError("SUMO is not connected.")
+
+        traffic_lights = traci.trafficlight.getIDList()
+
+        if len(action) != len(traffic_lights):
+            raise ValueError(
+                f"Expected {len(traffic_lights)} actions, "
+                f"got {len(action)}"
+            )
+
+        for traffic_light_id, phase in zip(
+            traffic_lights,
+            action
+        ):
+            traci.trafficlight.setPhase(
+                traffic_light_id,
+                int(phase)
+            )
+
     def close(self):
         """
         Close the TraCI connection.

@@ -1,50 +1,65 @@
+import numpy as np
+
+
+NUM_TRAFFIC_LIGHTS = 21
+PHASE_COUNTS = [4] * 9 + [3] * 12
+
+
 class RLService:
     """
-    Reinforcement Learning service for EcoTwin.
+    Backend RL service interface for EcoTwin.
 
-    This service provides a backend interface for RL-based
-    traffic/environment optimization. The actual RL model
-    can be integrated later without changing the API layer.
+    Compatible with the action-space contract defined by the
+    RL component: 21 traffic lights with discrete phase actions.
+
+    The trained PPO checkpoint can be connected later without
+    changing the API endpoints.
     """
 
     def __init__(self):
         self.initialized = False
+        self.last_action = None
 
     def initialize(self):
-        """
-        Initialize the RL service.
-        """
         self.initialized = True
 
         return {
             "status": "initialized",
-            "message": "RL service initialized successfully"
+            "message": "RL service initialized successfully",
+            "action_space": {
+                "type": "MultiDiscrete",
+                "traffic_lights": NUM_TRAFFIC_LIGHTS,
+                "phase_counts": PHASE_COUNTS,
+            },
         }
 
     def get_action(self, state: dict):
-        """
-        Get an action for the given simulation state.
-
-        Placeholder implementation until the actual RL model
-        is integrated.
-        """
         if not self.initialized:
             self.initialize()
 
+        # Safe backend fallback until the trained PPO checkpoint
+        # is available in the Member-3 runtime environment.
+        action = np.zeros(
+            NUM_TRAFFIC_LIGHTS,
+            dtype=np.int64,
+        )
+
+        self.last_action = action.tolist()
+
         return {
-            "action": "maintain",
-            "state": state
+            "action": self.last_action,
+            "action_type": "phase_control",
+            "traffic_lights": NUM_TRAFFIC_LIGHTS,
+            "state": state,
         }
 
     def reset(self):
-        """
-        Reset RL service state.
-        """
         self.initialized = False
+        self.last_action = None
 
         return {
             "status": "reset",
-            "message": "RL service reset successfully"
+            "message": "RL service reset successfully",
         }
 
 
