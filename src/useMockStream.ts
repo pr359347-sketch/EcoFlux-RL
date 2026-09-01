@@ -1,38 +1,33 @@
 import { useState, useEffect } from 'react';
 import type { SimulationData } from './types';
 
-export function useMockStream(): SimulationData {
-  const [simulationData, setSimulationData] = useState<SimulationData>({
-    status: 'running',
+export function useMockStream(enabled: boolean): SimulationData {
+  const [data, setData] = useState<SimulationData>({
+    status: enabled ? 'running' : 'stopped',
     vehicles: [
-      { id: 'veh_1', lat: 12.9716, lng: 77.5946, speed: 12.5 },
-      { id: 'veh_2', lat: 12.9750, lng: 77.5900, speed: 14.2 },
+      { id: 'v_101', lat: 12.9716, lng: 77.5946, speed: 15.4 },
+      { id: 'v_102', lat: 12.9740, lng: 77.5920, speed: 12.1 },
     ],
     metrics: {
-      timestamps: ['10:00', '10:01', '10:02', '10:03'],
-      total_co2: [1200, 1250, 1310, 1420],
-      average_wait_time: [35, 33, 36, 34.2],
+      timestamps: ['12:00', '12:01', '12:02'],
+      total_co2: [1100, 1150, 1120],
+      average_wait_time: [28.5, 27.2, 26.8],
     }
   });
 
   useEffect(() => {
+    if (!enabled) return;
     const interval = setInterval(() => {
-      setSimulationData((prev) => ({
+      setData(prev => ({
         ...prev,
-        vehicles: prev.vehicles.map(v => ({
-          ...v,
-          lat: v.lat + (Math.random() - 0.5) * 0.001,
-          lng: v.lng + (Math.random() - 0.5) * 0.001,
-        })),
         metrics: {
           ...prev.metrics,
-          total_co2: [...prev.metrics.total_co2.slice(1), prev.metrics.total_co2[prev.metrics.total_co2.length - 1] + Math.floor(Math.random() * 10)]
+          total_co2: [...prev.metrics.total_co2.slice(1), prev.metrics.total_co2[prev.metrics.total_co2.length - 1] + 5]
         }
       }));
     }, 1000);
-
     return () => clearInterval(interval);
-  }, []);
+  }, [enabled]);
 
-  return simulationData;
+  return data;
 }
