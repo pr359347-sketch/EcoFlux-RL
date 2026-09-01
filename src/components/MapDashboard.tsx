@@ -10,16 +10,17 @@ export default function MapDashboard({ vehicles }: MapDashboardProps) {
   const centerPosition: [number, number] = [12.9716, 77.5946];
 
   return (
-    <div style={{ flex: 2, position: 'relative', width: '100%', height: '100%' }}>
+    <div style={{ flex: 2, position: 'relative', width: '100%', height: '100%', borderBottom: '1px solid #1e293b' }}>
       <MapContainer center={centerPosition} zoom={14} style={{ height: '100%', width: '100%' }}>
         <TileLayer
-          attribution='&copy; OpenStreetMap contributors'
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {vehicles.map((veh) => (
           <Marker key={veh.id} position={[veh.lat, veh.lng]}>
             <Popup>
-              Vehicle ID: {veh.id} <br /> Speed: {veh.speed} m/s
+              <div style={{ color: '#0f172a', fontWeight: 600 }}>Vehicle ID: {veh.id}</div>
+              <div style={{ color: '#475569', fontSize: '12px' }}>Speed: {veh.speed} m/s</div>
             </Popup>
           </Marker>
         ))}
