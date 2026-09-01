@@ -16,3 +16,5 @@ export interface SimulationData {
   vehicles: Vehicle[];
   metrics: SimulationMetrics;
 }
+
+export type ConnectionState = 'connected' | 'disconnected' | 'connecting' | 'stopped' | 'error';
