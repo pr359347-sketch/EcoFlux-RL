@@ -1,72 +1,74 @@
-# EcoTwin Backend
+# 🌱 EcoTwin – Smart Traffic Simulation Backend
 
-Backend API for the EcoTwin urban traffic and carbon dispersal simulation project.
+> 🚦 An intelligent traffic simulation backend combining **FastAPI, Eclipse SUMO, TraCI, Reinforcement Learning and WebSocket communication** for real-time traffic simulation and monitoring.
 
-The backend manages traffic simulation using Eclipse SUMO and TraCI, maintains simulation state, integrates the Reinforcement Learning (RL) service, and provides real-time simulation updates through WebSocket.
+---
 
-## Tech Stack
+## 👨‍💻 Member 3 – Backend Development
 
-- Python
-- FastAPI
-- Uvicorn
-- Eclipse SUMO
-- TraCI
-- WebSocket
-- Reinforcement Learning service
+This branch contains the complete **Backend and Simulation Integration** work developed by **Member 3** for the EcoTwin project.
 
-## Backend Features
+The backend connects the traffic simulation environment with the application through REST APIs and real-time WebSocket communication.
 
-- Simulation start, stop and reset
-- Simulation status monitoring
-- Simulation step execution
-- SUMO integration using TraCI
-- Real-time WebSocket simulation streaming
-- Vehicle count tracking
-- Simulation time tracking
-- RL service integration
-- RL action generation
-- RL service initialization and reset
-- RL action persistence in simulation state
-- Swagger API documentation
+---
 
-## Project Structure
+## 🎯 Member 3 Contributions
+
+- ⚡ Developed the FastAPI backend
+- 🚦 Integrated Eclipse SUMO with the backend using TraCI
+- 🔄 Implemented simulation Start, Step, Stop and Reset operations
+- 🤖 Integrated the Reinforcement Learning service
+- 📊 Implemented centralized simulation state management
+- 🚗 Added real-time vehicle count monitoring
+- 🔌 Implemented WebSocket-based live simulation updates
+- 🐳 Added Docker support for the backend and SUMO
+- 🧪 Tested REST APIs, SUMO, RL integration, WebSocket streaming and Docker execution
+
+---
+
+# 📁 Project Structure
 
 ```text
-Backend/
-├── app/
-│   ├── main.py
-│   │
-│   ├── core/
-│   │   └── config.py
-│   │
-│   ├── routes/
-│   │   ├── health.py
-│   │   ├── simulation.py
-│   │   └── rl.py
-│   │
-│   ├── schemas/
-│   │   └── simulation.py
-│   │
-│   ├── services/
-│   │   ├── simulation_service.py
-│   │   └── rl_service.py
-│   │
-│   ├── simulation/
-│   │   ├── state.py
-│   │   └── sumo_client.py
-│   │
-│   └── websocket/
-│       └── manager.py
+EcoTwin/
 │
-├── sumo/
-│   ├── network.net.xml
-│   ├── routes.rou.xml
-│   └── simulation.sumocfg
+├── 📂 Backend/
+│   │
+│   ├── 📂 app/
+│   │   │
+│   │   ├── 📄 main.py
+│   │   │
+│   │   ├── 📂 core/
+│   │   │   └── ⚙️ Application configuration
+│   │   │
+│   │   ├── 📂 routes/
+│   │   │   ├── 📄 health.py
+│   │   │   └── 📄 simulation.py
+│   │   │
+│   │   ├── 📂 schemas/
+│   │   │   └── 📋 API data schemas
+│   │   │
+│   │   ├── 📂 services/
+│   │   │   ├── 🎮 simulation_service.py
+│   │   │   └── 🤖 rl_service.py
+│   │   │
+│   │   ├── 📂 simulation/
+│   │   │   ├── 🚦 sumo_client.py
+│   │   │   └── 📊 state.py
+│   │   │
+│   │   └── 📂 websocket/
+│   │       └── 🔌 WebSocket management
+│   │
+│   ├── 🚦 sumo/
+│   │   ├── 📄 network.net.xml
+│   │   ├── 📄 routes.rou.xml
+│   │   └── 📄 simulation.sumocfg
+│   │
+│   ├── 🧪 tests/
+│   │   ├── 📄 test_sumo.py
+│   │   └── 📄 test_websocket.py
+│   │
+│   ├── 🐳 Dockerfile
+│   ├── 📦 requirements.txt
+│   └── 📖 README.md
 │
-├── tests/
-│   ├── test_sumo.py
-│   └── test_websocket.py
-│
-├── requirements.txt
-├── Dockerfile
-└── README.md
+└── 📂 Other Project Components
