@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+websockets
+traci
+numpy
+gymnasium
